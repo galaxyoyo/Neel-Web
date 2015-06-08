@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
-  <runtime name="jre8"/>
-  <secondary-runtime name="Google App Engine"/>
+  <runtime name="jdk1.7.0_72"/>
+  <secondary-runtime name="Google App Engine (1.9.21)"/>
   <installed facet="java" version="1.7"/>
 </faceted-project>
