@@ -13,9 +13,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/index</url-pattern>
 	</servlet-mapping>
 	<filter>
+		<filter-name>Objectify</filter-name>
+		<filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+	</filter>
+	<filter>
 	    <filter-name>ExceptionCatcher</filter-name>
 	    <filter-class>galaxyoyo.web.neel.filters.ExceptionCatcher</filter-class>
 	</filter>
+	<filter-mapping>
+		<filter-name>Objectify</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	<filter-mapping>
 	    <filter-name>ExceptionCatcher</filter-name>
 	    <url-pattern>/*</url-pattern>
