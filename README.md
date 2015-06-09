@@ -8,4 +8,4 @@ Ce que vous avez cependant le droit de faire, c'est vous inscrire sur <a href="h
 ###D&apos;accord, mais c'est quoi ?
 Ce serveur est (ou sera) le plus complet des serveurs Minecraft RPG. Normal, c'est le nôtre ;) De bûcheron à maçon en passant par tailleur de pierre et agriculteur, vous avez un choix de métiers différents, chacun possédant ses avantages et ses inconvénients. Sachez que coupez du bois, frapper quelqu'un et même crafter des planches est illégal si ce n'est pas votre métier !
 
-#####<center>Rejoignez-nous vite !#####
+#####<center>Rejoignez-nous vite !</center>#####
