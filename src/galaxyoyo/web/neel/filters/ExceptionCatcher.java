@@ -38,11 +38,11 @@ public class ExceptionCatcher implements Filter
 			HttpServletRequest hreq = (HttpServletRequest) req;
 			String html = "<!DOCTYPE html>\n<html>\n  <head>\n  <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n";
 			html += "  <title>Erreur 500 : " + t.getClass().getSimpleName() + "</title>\n  \n  <body>\n  <pre>\n\t";
-			html += "\tUne erreur est survenue lors du chargement de la page '" + hreq.getServletPath() + "'<br /><br />\n";
-			html += "\tVoici le log complet :<br /><hr /><br />\n\n";
+			html += "\tUne erreur est survenue lors du chargement de la page '" + hreq.getServletPath() + "'\n\n";
+			html += "\tVoici le log complet :\n<hr />\n";
 			StringWriter sw = new StringWriter();
 			t.printStackTrace(new PrintWriter(sw));
-			html += sw.toString().replaceAll("\n", "<br />\n");
+			html += sw.toString();
 			sw.close();
 			html += "\n    </pre>\n  </body>\n</html>\n";
 			resp.getWriter().write(html);

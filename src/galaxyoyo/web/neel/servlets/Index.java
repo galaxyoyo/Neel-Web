@@ -13,6 +13,6 @@ public class Index extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
 	{
-		getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(req, resp);
+		getServletContext().getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, resp);
 	}
 }
