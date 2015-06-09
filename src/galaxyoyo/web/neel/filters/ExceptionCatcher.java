@@ -36,16 +36,24 @@ public class ExceptionCatcher implements Filter
 		catch (Throwable t)
 		{
 			HttpServletRequest hreq = (HttpServletRequest) req;
+			HttpServletResponse hresp = (HttpServletResponse) resp;
+			hresp.setStatus(500);
+			String url = hreq.getProtocol().toLowerCase().substring(0, hreq.getProtocol().length() - 4) + "://" + hreq.getServerName();
+			if (hreq.getServerPort() != 80)
+				url += ":" + hreq.getServerPort();
+			url += hreq.getServletPath();
+			if (hreq.getPathInfo() != null)
+				url += hreq.getPathInfo();
 			String html = "<!DOCTYPE html>\n<html>\n  <head>\n  <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n";
-			html += "  <title>Erreur 500 : " + t.getClass().getSimpleName() + "</title>\n  \n  <body>\n  <pre>\n\t";
-			html += "\tUne erreur est survenue lors du chargement de la page '" + hreq.getServletPath() + "'\n\n";
-			html += "\tVoici le log complet :\n<hr />\n";
+			html += "  <title>Erreur 500 : " + t.getClass().getSimpleName() + "</title>\n  \n  <body>\n  <pre>\n";
+			html += "Une erreur est survenue lors du chargement de la page '" + url + "'\n\n";
+			html += "Voici le log complet :\n\n<hr />\n";
 			StringWriter sw = new StringWriter();
 			t.printStackTrace(new PrintWriter(sw));
 			html += sw.toString();
 			sw.close();
 			html += "\n    </pre>\n  </body>\n</html>\n";
-			resp.getWriter().write(html);
+			hresp.getWriter().write(html);
 		}
 	}
 	
