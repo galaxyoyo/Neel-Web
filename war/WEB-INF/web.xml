@@ -8,9 +8,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>Index</servlet-name>
 		<servlet-class>galaxyoyo.web.neel.servlets.Index</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>Query</servlet-name>
+		<servlet-class>galaxyoyo.web.neel.servlets.QueryTMP</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Index</servlet-name>
 		<url-pattern>/index</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Query</servlet-name>
+		<url-pattern>/query</url-pattern>
 	</servlet-mapping>
 	<filter>
 		<filter-name>Objectify</filter-name>
