@@ -37,6 +37,7 @@ public class ExceptionCatcher implements Filter
 		{
 			HttpServletRequest hreq = (HttpServletRequest) req;
 			HttpServletResponse hresp = (HttpServletResponse) resp;
+			hresp.setContentType("text/html; charset=UTF-8");
 			hresp.setStatus(500);
 			String url = hreq.getProtocol().toLowerCase().substring(0, hreq.getProtocol().length() - 4) + "://" + hreq.getServerName();
 			if (hreq.getServerPort() != 80)
