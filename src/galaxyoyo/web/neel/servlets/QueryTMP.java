@@ -28,7 +28,8 @@ public class QueryTMP extends HttpServlet
 		resp.getWriter().write("Dossier de la map : " + query.getMap() + "\n");
 		resp.getWriter().write(query.getConnectedPlayersNumber() + " / " + query.getMaxPlayers()
 						+ " joueur" + (query.getConnectedPlayersNumber() > 1 ? "s" : "") + " connect\u00e9"
-						+ (query.getConnectedPlayersNumber() > 1 ? "s" : "") + " :\n");
+						+ (query.getConnectedPlayersNumber() > 1 ? "s" : "")
+						+ (query.getConnectedPlayersNumber() > 0 ? " :" : "") + "\n");
 		for (String player : query.getConnectedPlayers())
 		{
 			resp.getWriter().write("\t- " + player + "\n");
