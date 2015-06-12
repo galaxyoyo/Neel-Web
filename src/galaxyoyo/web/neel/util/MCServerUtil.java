@@ -1,15 +1,20 @@
 package galaxyoyo.web.neel.util;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.commons.io.IOUtils;
+
+import com.google.gson.Gson;
 
 public class MCServerUtil
 {
@@ -23,114 +28,89 @@ public class MCServerUtil
 		Query()
 		{
 		}
-		
-		private final Map<String, String> values = new HashMap<String, String>();
+
+		public String hostname;
+		public String gametype;
+		public String game_id;
+		public String version;
+		public String plugins;
+		public String map;
+		public int numplayers;
+		public int maxplayers;
+		public int hostport;
+		public String hostip;
 		private final List<String> players = new ArrayList<String>();
 		
 		static Query query(String ip, int port) throws IOException
 		{
-			Query query = new Query();
-			InetSocketAddress address = new InetSocketAddress(ip, port);
-			final DatagramSocket socket = new DatagramSocket();
-			
-			try
-			{
-				final byte[] receivedData = new byte[10240];
-				socket.setSoTimeout(2000);
-				sendPacket(socket, address, 0xFE, 0xFD, 0x09, 0x01, 0x01, 0x01, 0x01);
-				final int challengeInteger;
-				receivePacket(socket, receivedData);
-				byte b = -1;
-				int i = 0;
-				byte[] buffer = new byte[11];
-				for (int count = 5; (b = receivedData[count++]) != 0;)
-					buffer[++i] = b;
-				challengeInteger = Integer.parseInt(new String(buffer).trim());
-				sendPacket(socket, address, 0xFE, 0xFD, 0x00, 0x01, 0x01, 0x01,
-								0x01, challengeInteger >> 24, challengeInteger >> 16,
-								challengeInteger >> 8, challengeInteger, 0x00, 0x00, 0x00,
-								0x00);
-				final int length = receivePacket(socket, receivedData).getLength();
-				final AtomicInteger cursor = new AtomicInteger(5);
-				while (cursor.get() < length)
-				{
-					String key = readString(receivedData, cursor);
-					if (key.isEmpty())
-						break;
-					String value = readString(receivedData, cursor);
-					query.values.put(key, value);
-				}
-				readString(receivedData, cursor);
-				while (cursor.get() < length)
-				{
-					final String player = readString(receivedData, cursor);
-					if (!player.isEmpty())
-						query.players.add(player);
-				}
-			}
-			finally
-			{
-				socket.close();
-			}
-			
-			return query;
+			URL url = new URL("https://utils-galaxyoyo.rhcloud.com/mc-query");
+			HttpURLConnection co = (HttpURLConnection) url.openConnection();
+			co.setRequestMethod("POST");
+			co.setDoOutput(true);
+			DataOutputStream dos = new DataOutputStream(co.getOutputStream());
+			dos.writeBytes("ip=" + ip + "&port=" + port);
+			dos.flush();
+			dos.close();
+			String json = IOUtils.toString(co.getInputStream(), "UTF-8");
+			System.out.println(json);
+			return new Gson().fromJson(json, Query.class);
 		}
 		
 		public String getHostname()
 		{
-			return values.get("hostname");
+			return hostname;
 		}
 		
 		public String getGametype()
 		{
-			return values.get("gametype");
+			return gametype;
 		}
 		
 		public String getGameId()
 		{
-			return values.get("game_id");
+			return game_id;
 		}
 		
 		public String getVersion()
 		{
-			return values.get("version");
+			return version;
 		}
 		
 		public String getMotor()
 		{
-			return values.get("plugins").split(":")[0];
+			return plugins.split(":")[0];
 		}
 		
 		public List<String> getPlugins()
 		{
-			String all = values.get("plugins");
+			String all = plugins;
 			all = all.substring(all.indexOf(':') + 2);
 			return Arrays.asList(all.split("; "));
 		}
 		
 		public String getMap()
 		{
-			return values.get("map");
+			return map;
 		}
 		
 		public int getConnectedPlayersNumber()
 		{
-			return Integer.parseInt(values.get("numplayers"));
+			return numplayers;
 		}
 		
 		public int getMaxPlayers()
 		{
-			return Integer.parseInt(values.get("maxplayers"));
+			return maxplayers;
 		}
 		
 		public int getHostPort()
 		{
-			return Integer.parseInt(values.get("hostport"));
+			return hostport;
 		}
 		
 		public String getHostIP()
 		{
-			return values.get("hostip");
+			return hostip;
 		}
 		
 		public List<String> getConnectedPlayers()
