@@ -17,7 +17,7 @@ public class QueryTMP extends HttpServlet
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
 	{
 		resp.setContentType("text/plain");
-		Query query = MCServerUtil.query("212.129.49.101", 40241);
+		Query query = MCServerUtil.query("212.129.49.101", 40242);
 		resp.getWriter().write("IP : " + query.getHostIP() + ":" + query.getHostPort() + "\n");
 		resp.getWriter().write("Message du jour : " + query.getHostname() + "\n");
 		resp.getWriter().write("Jeu : " + query.getGameId() + "\n");
