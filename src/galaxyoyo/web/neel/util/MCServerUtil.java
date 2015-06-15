@@ -1,10 +1,8 @@
 package galaxyoyo.web.neel.util;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,16 +41,8 @@ public class MCServerUtil
 		
 		static Query query(String ip, int port) throws IOException
 		{
-			URL url = new URL("https://utils-galaxyoyo.rhcloud.com/mc-query");
-			HttpURLConnection co = (HttpURLConnection) url.openConnection();
-			co.setRequestMethod("POST");
-			co.setDoOutput(true);
-			DataOutputStream dos = new DataOutputStream(co.getOutputStream());
-			dos.writeBytes("ip=" + ip + "&port=" + port);
-			dos.flush();
-			dos.close();
-			String json = IOUtils.toString(co.getInputStream(), "UTF-8");
-			System.out.println(json);
+			URL url = new URL("http://" + ip + ":" + port + "/query");
+			String json = IOUtils.toString(url, "UTF-8");
 			return new Gson().fromJson(json, Query.class);
 		}
 		
