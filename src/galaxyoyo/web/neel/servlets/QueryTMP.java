@@ -35,7 +35,7 @@ public class QueryTMP extends HttpServlet
 						+ (query.getConnectedPlayersNumber() > 0 ? " :" : "") + "<br />\r\n");
 		for (String player : query.getConnectedPlayers())
 		{
-			resp.getWriter().write(" &nbsp; &nbsp; &nbsp; &nbsp;- " + player + "\n");
+			resp.getWriter().write(" &nbsp; &nbsp; &nbsp; &nbsp;- " + player + "<br />\r\n");
 		}
 		resp.getWriter().write("</body>\r\n</html>");
 	}
