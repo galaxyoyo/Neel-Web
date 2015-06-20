@@ -18,6 +18,7 @@
   
   <body>
     <h1>Bienvenue sur le serveur Minecraft RPG Neel !</h1>
-    <em>Cette page sera modifiée par la suite par MechaKiwi01 (normalement, sinon ce sera par galaxyoyo, DeathMagnetic ou dans le pire des cas Loicgun)</em>
+    <em>Cette page sera modifiée par la suite par MechaKiwi01 (normalement, sinon ce sera par galaxyoyo, DeathMagnetic ou dans le pire des cas Loicgun)</em><br />
+    <a href="http://www.omgserv.com/fr/contribute/235955/" target="_blank"><img src="http://www.omgserv.com/img/contribute.png"></a>
   </body>
 </html>
