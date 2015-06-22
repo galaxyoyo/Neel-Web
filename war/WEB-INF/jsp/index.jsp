@@ -3,13 +3,16 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="Projet de serveur Minecraft totalement RPG !" />
+    <meta name="keywords" content="serveur, Minecraft, RPG, Neel, Java, galaxyoyo, DeathMagnetic, Loicgun, MechaKiwi01, 1.8, 1.8.7" />
+    <meta name="robot" content="index, follow" />
     <title>Neel - Serveur Minecraft RPG</title>
   </head>
   
   <body>
     <h1>Bienvenue sur le serveur Minecraft RPG Neel !</h1>
     <em>Cette page sera modifiée par la suite par MechaKiwi01 (normalement, sinon ce sera par galaxyoyo, DeathMagnetic ou dans le pire des cas Loicgun)</em><br />
-    <a href="http://www.omgserv.com/fr/contribute/235955/" target="_blank"><img src="http://www.omgserv.com/img/contribute.png"></a>
+    <a href="http://www.omgserv.com/fr/contribute/235955/" target="_blank" rel="nofollow"><img src="http://www.omgserv.com/img/contribute.png"></a>
   </body>
   
   <script>
