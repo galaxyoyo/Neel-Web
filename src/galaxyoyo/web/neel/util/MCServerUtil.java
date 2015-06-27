@@ -1,9 +1,6 @@
 package galaxyoyo.web.neel.util;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,9 +13,29 @@ import com.google.gson.Gson;
 
 public class MCServerUtil
 {
+	public static Query query() throws IOException
+	{
+		return query(getServerIP(), getQueryPort());
+	}
+	
 	public static Query query(String address, int port) throws IOException
 	{
 		return Query.query(address, port);
+	}
+	
+	public static String getServerIP()
+	{
+		return "neelmc.omgcraft.fr";
+	}
+	
+	public static int getServerPort()
+	{
+		return 12769;
+	}
+	
+	public static int getQueryPort()
+	{
+		return 40281;
 	}
 	
 	public static class Query
@@ -106,28 +123,6 @@ public class MCServerUtil
 		public List<String> getConnectedPlayers()
 		{
 			return new ArrayList<String>(players);
-		}
-		
-		static void sendPacket(DatagramSocket socket, InetSocketAddress targetAddress, byte... data) throws IOException
-		{
-			DatagramPacket sendPacket = new DatagramPacket(data, data.length, targetAddress.getAddress(), targetAddress.getPort());
-			socket.send(sendPacket);
-		}
-		
-		static void sendPacket(DatagramSocket socket, InetSocketAddress targetAddress, int... data) throws IOException
-		{
-			final byte[] d = new byte[data.length];
-			int i = 0;
-			for(int j : data)
-				d[i++] = (byte)(j & 0xFF);
-			sendPacket(socket, targetAddress, d);
-		}
-		
-		static DatagramPacket receivePacket(DatagramSocket socket, byte[] buffer) throws IOException
-		{
-			final DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-			socket.receive(dp);
-			return dp;
 		}
 		
 		static String readString(byte[] array, AtomicInteger cursor)

@@ -17,7 +17,7 @@ public class QueryTMP extends HttpServlet
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
 	{
 		resp.setContentType("text/html; charset=UTF-8");
-		Query query = MCServerUtil.query("212.129.49.101", 40242);
+		Query query = MCServerUtil.query();
 		resp.getWriter().write("<!doctype html>\r\n<head>\r\n<meta http-equiv=\"content-type\" "
 						+ "content=\"text/html; charset=UTF-8\" />\r\n<title>Query Serveur</title>\r\n"
 						+ "</head>\r\n<body>\r\n");

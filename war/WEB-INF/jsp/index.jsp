@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page import="galaxyoyo.web.neel.util.MCServerUtil.Query" contentType="text/html; charset=UTF-8" language="java" %>
+<% boolean serverOnline = (boolean) request.getAttribute("server-online"); Query query = null; if (serverOnline) query = (Query) request.getAttribute("server-query"); %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -11,8 +12,24 @@
   
   <body>
     <h1>Bienvenue sur le serveur Minecraft RPG Neel !</h1>
-    <em>Cette page sera modifiée par la suite par MechaKiwi01 (normalement, sinon ce sera par galaxyoyo, DeathMagnetic ou dans le pire des cas Loicgun)</em><br />
+    IP : <strong><%= request.getAttribute("server-ip") %>:<%= request.getAttribute("server-port") %></strong><br />
+    <em>Cette page sera modifiée par la suite par on sait pas trop qui</em><br />
     <a href="http://www.omgserv.com/fr/contribute/235955/" target="_blank" rel="nofollow"><img src="http://www.omgserv.com/img/contribute.png"></a>
+    <div style="position: absolute; top: 1em; right: 1em; text-align: justify; border: 2px solid blue; border-radius: 10px; padding: 5px;">
+      <% if (serverOnline) {%>
+      Statut du serveur : <span style="color: green;">ONLINE</span><br />
+      Version <%= query.getVersion() %> sur <%= query.getMotor() %><br />
+      <%= query.getConnectedPlayersNumber() %> joueurs connectés / <%= query.getMaxPlayers() %> :<br />
+      <ul>
+        <%
+        for (String player : query.getConnectedPlayers())
+        	out.write("<li>" + player + "</li>\r\n");
+        %>
+      </ul>
+      <% }else{ %>
+      Statut du serveur : <span style="color: green;">OFFLINE</span>
+      <% } %>
+    </div>
   </body>
   
   <script>
