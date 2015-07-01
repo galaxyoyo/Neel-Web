@@ -6,6 +6,8 @@ import galaxyoyo.web.neel.util.MCServerUtil;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
@@ -45,6 +47,7 @@ public class Register extends HttpServlet
 						|| (mojangAccount && username != null))
 		{
 			resp.sendRedirect(req.getServletPath());
+			resp.getWriter().write("Something is null, that's an error");
 			return;
 		}
 		
@@ -79,8 +82,7 @@ public class Register extends HttpServlet
 				catch (AuthenticationException ex)
 				{
 					// Will be very strange ...
-					ex.printStackTrace();
-					return;
+					throw new ServletException(ex);
 				}
 			}
 			else
@@ -99,7 +101,7 @@ public class Register extends HttpServlet
 			else if (checkSHAResp.contains("Invalid"))
 				resp.getWriter().write("Mot de passe invalide");
 			
-			if (checkSHAResp.contains("OK"))
+			if (checkSHAResp.contains("OK") || checkSHAResp.contains("help"))
 			{
 				user = new User();
 				user.setEmail(email);
@@ -109,24 +111,34 @@ public class Register extends HttpServlet
 				{
 					Authentications.getAuth(user).logIn(true);
 				}
-				catch (AuthenticationException e)
+				catch (AuthenticationException ex)
 				{
 					// Will be very strange ...
-					e.printStackTrace();
+					throw new ServletException(ex);
 				}
 			}
 			else
+			{
+				resp.getWriter().write(checkSHAResp);
 				return;
+			}
 		}
 		
-		String token = Long.toHexString(System.nanoTime());
+		Random random = new Random();
+		String a = Long.toHexString(random.nextLong());
+		while (a.length() < 16)
+			a = Integer.toHexString(random.nextInt(16)) + a;
+		String b = Long.toHexString(random.nextLong());
+		while (b.length() < 16)
+			b = Integer.toHexString(random.nextInt(16)) + b;
+		String token = a + b;
 		user.verifiyEmail(false);
 		user.setEmailToken(token);
 		user.saveData();
 		try
 		{
-			MimeMessage mail = new MimeMessage(Session.getDefaultInstance(null));
-			mail.setFrom(new InternetAddress("inscriptions@neelmc.appspotmail.com", "Inscription - Neel"));
+			MimeMessage mail = new MimeMessage(Session.getDefaultInstance(new Properties()));
+			mail.setFrom(new InternetAddress("inscription@neel-mc.appspotmail.com", "Inscription - Neel"));
 			mail.setRecipient(RecipientType.TO, new InternetAddress(email, user.getUsername()));
 			mail.setSubject("Validation d'inscription sur le site de Neel", "UTF-8");
 			mail.setSentDate(new Date());
@@ -135,20 +147,19 @@ public class Register extends HttpServlet
 			text += " r\u00e9p\u00e9ter tout le blabla que j'ai pu vous faire pour le recrutement, mais vous ";
 			text += "<strong>devez</strong> valider votre compte en cliquant sur le lien suivant :</p>";
 			text += "<p><a href=\"https://neel-mc.appspot.com/validate-account?uid=" + UUIDTypeAdapter.fromUUID(user.getUUID());
-			text += "&token=" + token + ">https://neel-mc.appspot.com/validate-account</a></p>";
+			text += "&token=" + token + "\">https://neel-mc.appspot.com/validate-account</a></p>";
 			text += "<p>Nous esp\u00e9rons vous voir bientôt sur <em>Neel</em> !</p>";
 			text += "<hr /><p><strong style=\"font-weight: normal; text-decoration: italic;\">Ce message est un ";
 			text += "message automatique. Merci de ne pas y r\u00e9pondre. Envoy\u00e9 depuis Java ";
 			text += System.getProperty("java.version") + " sur " + System.getProperty("os.name") + " ";
 			text += System.getProperty("os.version") + ", fi\u00e8rement propuls\u00e9 par galaxyoyo";
 			text += "</strong><br /></p></div>";
-			mail.setContent(text, "text/html; charset=UTF-8");
+			mail.setText(text, "UTF-8", "html");
 			Transport.send(mail);
 		}
-		catch (MessagingException e)
+		catch (MessagingException ex)
 		{
-			e.printStackTrace();
-			return;
+			throw new ServletException(ex);
 		}
 		
 		resp.getWriter().write("Inscription effectu\u00e9e ! Vous avez dû reçevoir un mail confirmant votre demande, il contient un lien confirmant votre inscription.");

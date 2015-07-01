@@ -45,7 +45,16 @@ public class Authentications
 	public void logIn(boolean cracked) throws AuthenticationException
 	{
 		if (auth.canPlayOnline())
-			return;
+		{
+			if (user.getId() == null)
+			{
+				Map<String, Object> map = auth.saveForStorage();
+				map.put("accessToken", "");
+				auth.loadFromStorage(map);
+			}
+			else
+				return;
+		}
 		
 		try
 		{
@@ -93,7 +102,6 @@ public class Authentications
 	
 	public boolean isLogged()
 	{
-		auth.getAuthenticatedToken();
 		return auth.isLoggedIn();
 	}
 	
@@ -113,7 +121,8 @@ public class Authentications
 		{
 			Authentications auth = new Authentications(user);
 			auths.put(user.getClientToken(), auth);
-			user.refreshData();
+			if (user.getAuthenticationToken() != null && !user.getAuthenticationToken().isEmpty())
+				user.refreshData();
 		}
 		return auths.get(user.getClientToken());
 	}

@@ -4,6 +4,7 @@ import galaxyoyo.web.neel.util.Authentications;
 import galaxyoyo.web.neel.util.DSUtil;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -13,14 +14,19 @@ import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.util.UUIDTypeAdapter;
 
+@SuppressWarnings("serial")
 @Entity
-public class User
+public class User implements Serializable
 {
 	@Id
 	private String id;
@@ -28,7 +34,7 @@ public class User
 	private String email;
 	private Blob password;
 	private String authenticationToken;
-	private Map<String, Object> savableAuthProperties = new HashMap<String, Object>();
+	private String savableAuthPropertiesJSON;
 	private boolean cracked;
 	
 	private boolean emailVerified = false;
@@ -36,6 +42,11 @@ public class User
 	
 	private Grade grade = Grade.HABITANT;
 	private int coins = 0;
+	
+	public String getId()
+	{
+		return id;
+	}
 	
 	public UUID getUUID()
 	{
@@ -48,7 +59,6 @@ public class User
 		if (this.id != null && !this.id.isEmpty())
 			DSUtil.delete(User.class, this.id);
 		this.id = id;
-		DSUtil.save(this);
 	}
 	
 	public String getUsername()
@@ -93,19 +103,25 @@ public class User
 	
 	public String getClientToken()
 	{
-		return UUIDTypeAdapter.fromUUID(UUID.nameUUIDFromBytes(("Client token of " + username).getBytes(StandardCharsets.UTF_8)));
+		return UUIDTypeAdapter.fromUUID(UUID.nameUUIDFromBytes(("Client token of " + email).getBytes(StandardCharsets.UTF_8)));
 	}
 	
 	public void saveData()
 	{
-		savableAuthProperties.clear();
+		Map<String, Object> savableAuthProperties = Maps.newHashMap();
 		savableAuthProperties.putAll(Authentications.getAuth(this).getSavableProperties());
+		savableAuthPropertiesJSON = new Gson().toJson(savableAuthProperties);
 		DSUtil.save(this);
 	}
 	
 	public void refreshData()
 	{
-		Authentications.getAuth(this).refreshProperties(savableAuthProperties);
+		Authentications.getAuth(this).refreshProperties(getSavableAuthProperties());
+	}
+	
+	public Map<String, Object> getSavableAuthProperties()
+	{
+		return new Gson().fromJson(savableAuthPropertiesJSON, new TypeToken<HashMap<String, Object>>() {}.getType());
 	}
 	
 	public boolean isCracked()
@@ -211,6 +227,12 @@ public class User
 			cape = new byte[0];
 		}
 		return cape;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return MoreObjects.toStringHelper(this).add("id", id).add("username", username).add("accessToken", authenticationToken).add("storage", getSavableAuthProperties()).toString();
 	}
 	
 	public static enum Grade

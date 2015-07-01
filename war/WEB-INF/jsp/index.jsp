@@ -1,5 +1,5 @@
-<%@ page import="galaxyoyo.web.neel.util.MCServerUtil.Query" contentType="text/html; charset=UTF-8" language="java" %>
-<% boolean serverOnline = ((Boolean) request.getAttribute("server-online")).booleanValue(); Query query = null; if (serverOnline) query = (Query) request.getAttribute("server-query"); %>
+<%@ page import="galaxyoyo.web.neel.util.MCServerUtil.Query" import="galaxyoyo.web.neel.*" contentType="text/html; charset=UTF-8" language="java" %>
+<% boolean serverOnline = ((Boolean) request.getAttribute("server-online")).booleanValue(); Query query = null; if (serverOnline) query = (Query) request.getAttribute("server-query"); User user = (User) request.getAttribute("user"); %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -30,6 +30,12 @@
       Statut du serveur : <span style="color: green;">OFFLINE</span>
       <% } %>
     </div>
+    <%
+    if (user != null)
+    {
+    	%>Yo <%= user.getUsername() %> !<%
+    }
+    %>
   </body>
   
   <script>
