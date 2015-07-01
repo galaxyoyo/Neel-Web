@@ -1,7 +1,10 @@
 package galaxyoyo.web.neel.util;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +24,25 @@ public class MCServerUtil
 	public static Query query(String address, int port) throws IOException
 	{
 		return Query.query(address, port);
+	}
+	
+	public static String rcon(String msg) throws IOException
+	{
+		return rcon(getServerIP(), getQueryPort(), msg);
+	}
+	
+	public static String rcon(String ip, int port, String msg) throws IOException
+	{
+		URL url = new URL("http://" + ip + ":" + port + "/rcon");
+		HttpURLConnection co = (HttpURLConnection) url.openConnection();
+		co.setRequestMethod("POST");
+		co.setDoOutput(true);
+		OutputStream os = co.getOutputStream();
+		os.write(("password=neel-opopop&command=" + msg).getBytes(StandardCharsets.UTF_8));
+		os.close();
+		co.connect();
+		String resp = IOUtils.toString(co.getInputStream(), StandardCharsets.UTF_8);
+		return resp;
 	}
 	
 	public static String getServerIP()

@@ -1,5 +1,5 @@
 <%@ page import="galaxyoyo.web.neel.util.MCServerUtil.Query" contentType="text/html; charset=UTF-8" language="java" %>
-<% boolean serverOnline = (boolean) request.getAttribute("server-online"); Query query = null; if (serverOnline) query = (Query) request.getAttribute("server-query"); %>
+<% boolean serverOnline = ((Boolean) request.getAttribute("server-online")).booleanValue(); Query query = null; if (serverOnline) query = (Query) request.getAttribute("server-query"); %>
 <!DOCTYPE html>
 <html>
   <head>
